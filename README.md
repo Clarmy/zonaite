@@ -1,0 +1,2 @@
+# zonaite
+weather-data collector
