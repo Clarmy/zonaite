@@ -3,6 +3,7 @@ from io import StringIO
 
 import pandas as pd
 import requests
+from tqdm import tqdm
 
 
 class DecodedSynopCollector:
@@ -87,12 +88,12 @@ class DecodedSynopCollector:
             Both start_dt and end_dt will be converted to UTC internally.
             The time range is processed month by month to handle large date ranges efficiently.
         """
-        start_month = start_dt.month
-        end_month = end_dt.month
-
         dfs = []
-        while start_month <= end_month:
-            url = self._get_url(start_dt, station_id)
+        date_range = pd.date_range(start=start_dt, end=end_dt, freq="31D")
+        for dt in tqdm(
+            date_range, desc=f"Fetching data for {station_id} from {start_dt} to {end_dt}"
+        ):
+            url = self._get_url(dt, station_id)
             response = requests.get(url, timeout=10)
             if response.ok:
                 df = pd.read_csv(StringIO(response.text))
@@ -101,15 +102,26 @@ class DecodedSynopCollector:
                 status_code = response.status_code
                 if status_code == 404:
                     print(
-                        f"No data available for {start_dt.date()} of station {station_id}"
+                        f"No data available for {dt.date()} of station {station_id}"
                     )
                 else:
                     print(f"Error fetching data from {url}: {status_code}")
-            start_month += 1
 
         if dfs:
             return pd.concat(dfs, ignore_index=True)
         return None
+
+
+def get_decoded_synop_data(start_dt: datetime, end_dt: datetime, station_id: str):
+    """Get decoded SYNOP meteorological data for a specified time range and station ID.
+
+    Args:
+        start_dt (datetime): Start date and time (must include timezone information)
+        end_dt (datetime): End date and time (must include timezone information)
+        station_id (str): Meteorological station ID
+    """
+    collector = DecodedSynopCollector()
+    return collector.fetch(start_dt, end_dt, station_id)
 
 
 if __name__ == "__main__":
@@ -118,10 +130,12 @@ if __name__ == "__main__":
     print("Available variables:")
     print(collector.available_variables)
 
+    print("Available stations:")
+    print(collector.available_stations)
     from datetime import timezone
 
-    start_date = datetime(2024, 1, 1, tzinfo=timezone.utc)
-    end_date = datetime(2024, 3, 31, tzinfo=timezone.utc)
+    start_date = datetime(2000, 1, 1, tzinfo=timezone.utc)
+    end_date = datetime(2015, 3, 31, tzinfo=timezone.utc)
     station_id = "54511"
 
     print(
