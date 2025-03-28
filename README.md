@@ -49,9 +49,9 @@ elements = [
 
 # 下载数据
 result = download_gfs_data(
-    date_str="20250326",
-    cycle_str="00",
-    forecast_hour="000",
+    date=datetime(2025, 3, 26, tzinfo=timezone.utc),
+    cycle=0,
+    forecast_hour=0,
     elements=elements,
     output_path="gfs_data.grib2"
 )

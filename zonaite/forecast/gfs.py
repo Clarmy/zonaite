@@ -252,8 +252,7 @@ def download_bytes(
 
 
 def download_gfs_data(
-    date_str: str,
-    cycle_str: str,
+    dt: datetime,
     forecast_hour: str,
     elements: List[Dict],
     output_path: str,
@@ -317,6 +316,17 @@ def download_gfs_data(
     total_start_time = time.time()
     total_bytes = 0
 
+    # Ensure datetime has timezone information
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    else:
+        # Convert to UTC for consistency
+        dt = dt.astimezone(timezone.utc)
+    
+    # Extract date and cycle from datetime
+    date_str = dt.strftime("%Y%m%d")
+    cycle_str = dt.strftime("%H")
+    
     result = GFSDownloadResult(
         success=False,
         date=date_str,
@@ -405,16 +415,16 @@ if __name__ == "__main__":
 
     # Get previous day's UTC time
     utc_now = datetime.now(timezone.utc) - timedelta(days=1)
-    date_str = utc_now.strftime("%Y%m%d")
-
-    # Use fixed cycle and forecast hour
-    cycle_str = "00"
+    # Set time to 00:00 UTC
+    forecast_time = datetime(utc_now.year, utc_now.month, utc_now.day, 0, 0, tzinfo=timezone.utc)
+    
+    # Use fixed forecast hour
     forecast_hour = "384"
 
-    output_path = f"data/gfs_{date_str}_{cycle_str}_{forecast_hour}.grib2"
-    logger.info(f"Starting GFS data download: {date_str}_{cycle_str}z")
+    output_path = f"data/gfs_{forecast_time.strftime('%Y%m%d')}_{forecast_time.strftime('%H')}_{forecast_hour}.grib2"
+    logger.info(f"Starting GFS data download: {forecast_time.strftime('%Y%m%d')}_{forecast_time.strftime('%H')}z")
     result = download_gfs_data(
-        date_str, cycle_str, forecast_hour, elements, output_path
+        forecast_time, forecast_hour, elements, output_path
     )
 
     if result.success:
