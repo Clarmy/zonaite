@@ -3,17 +3,19 @@ name = "zonaite"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = [
+    "boto3>=1.37.23",
+    "loguru>=0.7.3",
     "pandas>=2.2.3",
     "requests>=2.32.3",
-    "tqdm>=4.66.2",
+    "tqdm>=4.67.1",
 ]
 
 [dependency-groups]
 dev = [
     "black>=25.1.0",
     "flake8>=7.1.2",
-    "ipython>=9.0.2",
+    "ipython>=8.18.1",
     "isort>=6.0.1",
 ]

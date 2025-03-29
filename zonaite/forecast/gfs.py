@@ -338,7 +338,7 @@ def download_gfs_data(
 
     try:
         # Build file path
-        grib_key = f"gfs.{date_str}/{cycle_str}/atmos/gfs.t{cycle_str}z.pgrb2.0p25.f{forecast_hour}"
+        grib_key = f"gfs.{date_str}/{cycle_str}/atmos/gfs.t{cycle_str}z.pgrb2.0p25.f{forecast_hour:03}"
         idx_key = f"{grib_key}.idx"
 
         # Create S3 client with anonymous access
