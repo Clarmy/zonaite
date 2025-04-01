@@ -361,7 +361,11 @@ def download_gfs_data(
             total_bytes += len(chunk)
 
         # Save data
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        try:
+            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        except FileNotFoundError:
+            pass
+
         with open(output_path, "wb") as f:
             f.write(merged_data)
 
@@ -417,7 +421,11 @@ if __name__ == "__main__":
             f"Starting GFS data download: {init_time.strftime('%Y%m%d')}_{init_time.strftime('%H')}z"
         )
     result = download_gfs_data(
-        init_dt=init_time, forecast_hour=forecast_hour, elements=elements, output_path=output_path, quiet=quiet
+        init_dt=init_time,
+        forecast_hour=forecast_hour,
+        elements=elements,
+        output_path=output_path,
+        quiet=quiet,
     )
 
     if not quiet:
