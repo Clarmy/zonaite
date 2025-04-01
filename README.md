@@ -32,14 +32,6 @@ cd zonaite
 uv pip install .
 ```
 
-## 依赖项
-
-- Python >= 3.11
-- pandas >= 2.2.3
-- requests >= 2.32.3
-- tqdm >= 4.66.2
-- boto3 >= 1.34.0
-
 ## 使用示例
 
 ### GFS 数据下载
