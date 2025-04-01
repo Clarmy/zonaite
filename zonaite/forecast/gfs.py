@@ -322,11 +322,11 @@ def download_gfs_data(
     else:
         # Convert to UTC for consistency
         dt = dt.astimezone(timezone.utc)
-    
+
     # Extract date and cycle from datetime
     date_str = dt.strftime("%Y%m%d")
     cycle_str = dt.strftime("%H")
-    
+
     result = GFSDownloadResult(
         success=False,
         date=date_str,
@@ -416,16 +416,18 @@ if __name__ == "__main__":
     # Get previous day's UTC time
     utc_now = datetime.now(timezone.utc) - timedelta(days=1)
     # Set time to 00:00 UTC
-    forecast_time = datetime(utc_now.year, utc_now.month, utc_now.day, 0, 0, tzinfo=timezone.utc)
-    
+    forecast_time = datetime(
+        utc_now.year, utc_now.month, utc_now.day, 0, 0, tzinfo=timezone.utc
+    )
+
     # Use fixed forecast hour
     forecast_hour = "384"
 
     output_path = f"data/gfs_{forecast_time.strftime('%Y%m%d')}_{forecast_time.strftime('%H')}_{forecast_hour}.grib2"
-    logger.info(f"Starting GFS data download: {forecast_time.strftime('%Y%m%d')}_{forecast_time.strftime('%H')}z")
-    result = download_gfs_data(
-        forecast_time, forecast_hour, elements, output_path
+    logger.info(
+        f"Starting GFS data download: {forecast_time.strftime('%Y%m%d')}_{forecast_time.strftime('%H')}z"
     )
+    result = download_gfs_data(forecast_time, forecast_hour, elements, output_path)
 
     if result.success:
         logger.success(f"Download successful! File size: {result.file_size_mb:.2f}MB")

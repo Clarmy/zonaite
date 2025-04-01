@@ -29,7 +29,7 @@ uv pip install .
 
 ## 依赖项
 
-- Python >= 3.8
+- Python >= 3.11
 - pandas >= 2.2.3
 - requests >= 2.32.3
 - tqdm >= 4.66.2
@@ -83,9 +83,13 @@ if df is not None:
 
 ## 开发
 
-如果你想参与开发，可以安装开发依赖：
+如果你想参与开发，需要确保你的 Python 版本 >= 3.11，然后安装开发依赖：
 
 ```bash
+# 确保使用 Python 3.11 或更高版本
+python --version
+
+# 安装开发依赖
 uv pip install -e ".[dev]"
 ```
 
@@ -94,6 +98,11 @@ uv pip install -e ".[dev]"
 - flake8 >= 7.1.2
 - ipython >= 9.0.2
 - isort >= 6.0.1
+
+注意：如果你遇到依赖安装问题，请确保：
+1. 使用 Python 3.11 或更高版本
+2. 如果使用虚拟环境，确保在正确的环境中安装
+3. 如果仍然遇到问题，可以尝试先升级 uv：`pip install -U uv`
 
 ## 许可证
 
