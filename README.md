@@ -21,13 +21,7 @@ Zonaite 是一个用于气象数据处理的 Python 工具包，提供了天气�
 
 ## 安装
 
-使用 pip 安装
-
-```bash
-pip install zonaite 
-```
-
-使用 uv 安装
+本项目使用 uv 作为包管理工具。安装步骤如下：
 
 ```bash
 # 克隆仓库
@@ -44,32 +38,46 @@ uv pip install .
 - pandas >= 2.2.3
 - requests >= 2.32.3
 - tqdm >= 4.66.2
+- boto3 >= 1.34.0
 
 ## 使用示例
 
 ### GFS 数据下载
 
 ```python
+from datetime import datetime, timezone
 from zonaite.forecast import download_gfs_data
 
 # 定义要下载的气象要素
 elements = [
-    {"name": "TMP", "level": "2 m above ground"},
-    {"name": "UGRD", "level": "10 m above ground"}
+    {"name": "TMP", "level": "2 m above ground"},  # 2米温度
+    {"name": "UGRD", "level": "10 m above ground"},  # 10米U风
+    {"name": "VGRD", "level": "10 m above ground"}   # 10米V风
 ]
+
+# 设置时间参数（使用 UTC 时间）
+dt = datetime(2024, 4, 1, tzinfo=timezone.utc)  # UTC时间
+forecast_hour = 3  # 预报时效（小时）
+
+# 设置输出路径
+output_path = "gfs_data.grib2"
 
 # 下载数据
 result = download_gfs_data(
-    date=datetime(2025, 3, 26, tzinfo=timezone.utc),
-    cycle=0,
-    forecast_hour=0,
+    dt=dt,
+    forecast_hour=forecast_hour,
     elements=elements,
-    output_path="gfs_data.grib2"
+    output_path=output_path,
+    quiet=False  # 显示下载进度
 )
 
 # 检查下载结果
 if result.success:
-    print(f"Downloaded {result.file_size_mb:.2f}MB")
+    print(f"下载成功！文件大小：{result.file_size_mb:.2f}MB")
+    print(f"下载速度：{result.download_speed_mbs:.2f}MB/s")
+    print(f"下载时间：{result.download_time_s:.2f}秒")
+else:
+    print(f"下载失败：{result.error_message}")
 ```
 
 ### SYNOP 观测数据解码
@@ -80,16 +88,18 @@ from zonaite.obser import get_decoded_synop_data
 
 # 设置时间范围和站点
 start_date = datetime(2024, 1, 1, tzinfo=timezone.utc)
-end_date = datetime(2024, 3, 31, tzinfo=timezone.utc)
-station_id = "54511"
+end_date = datetime(2024, 1, 31, tzinfo=timezone.utc)
+station_id = "54511"  # 北京站
 
 # 获取观测数据
 df = get_decoded_synop_data(start_date, end_date, station_id)
 
 # 查看数据
 if df is not None:
-    print("Data preview:")
-    print(df)
+    print("数据预览：")
+    print(df.head())
+    print("\n数据信息：")
+    print(df.info())
 ```
 
 ## 开发
