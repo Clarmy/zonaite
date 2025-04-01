@@ -44,6 +44,11 @@ uv pip install .
 
 ### GFS 数据下载
 
+更多 GFS 变量要素的代码和含义请参考：[Inventory of File gfs.t00z.pgrb2.0p25.f003](https://www.nco.ncep.noaa.gov/pmb/products/gfs/gfs.t00z.pgrb2.0p25.f003.shtml)
+
+本项目使用的 GFS 数据源来自 AWS 的 Open-Data 项目的 GFS 存储桶，具体参考：https://registry.opendata.aws/noaa-gfs-bdp-pds/
+本项目支持有限的历史 GFS 数据检索查询，具体支持的时间区间请从数据源那里查询。
+
 ```python
 from datetime import datetime, timezone
 from zonaite.forecast import download_gfs_data
@@ -82,6 +87,8 @@ else:
 
 ### SYNOP 观测数据解码
 
+本项目的 SYNOP 观测数据源来自于 [ogimet.com](https://www.ogimet.com/)，经过了一些整理和处理。
+
 ```python
 from datetime import datetime, timezone
 from zonaite.obser import get_decoded_synop_data
@@ -102,29 +109,16 @@ if df is not None:
     print(df.info())
 ```
 
-## 开发
+目前仅支持中国大陆的 290+ 个观测站，如果想要查看支持哪些站点和要素，可以使用下面的代码：
 
-如果你想参与开发，需要确保你的 Python 版本 >= 3.11，然后安装开发依赖：
+```python
+from zonaite.obser import DecodedSynopCollector
 
-```bash
-# 确保使用 Python 3.11 或更高版本
-python --version
+collector = DecodedSynopCollector()
 
-# 安装开发依赖
-uv pip install -e ".[dev]"
+print("Available variables:")
+print(collector.available_variables)
+
+print("Available stations:")
+print(collector.available_stations)
 ```
-
-开发依赖包括：
-- black >= 25.1.0
-- flake8 >= 7.1.2
-- ipython >= 9.0.2
-- isort >= 6.0.1
-
-注意：如果你遇到依赖安装问题，请确保：
-1. 使用 Python 3.11 或更高版本
-2. 如果使用虚拟环境，确保在正确的环境中安装
-3. 如果仍然遇到问题，可以尝试先升级 uv：`pip install -U uv`
-
-## 许可证
-
-本项目采用 MIT 许可证。详见 [LICENSE](LICENSE) 文件。
