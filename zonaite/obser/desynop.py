@@ -181,8 +181,6 @@ if __name__ == "__main__":
     logger.info("Available stations:")
     logger.info(collector.available_stations)
 
-    from datetime import timezone
-
     start_date = datetime(2000, 1, 1, tzinfo=timezone.utc)
     end_date = datetime(2015, 3, 31, tzinfo=timezone.utc)
     station_id = "54511"
