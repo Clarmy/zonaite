@@ -69,7 +69,7 @@ output_path = "gfs_data.grib2"
 
 # 下载数据
 result = download_gfs_data(
-    dt=dt,
+    init_dt=dt,
     forecast_hour=forecast_hour,
     elements=elements,
     output_path=output_path,
