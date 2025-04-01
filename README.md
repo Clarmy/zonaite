@@ -21,15 +21,10 @@ Zonaite 是一个用于气象数据处理的 Python 工具包，提供了天气�
 
 ## 安装
 
-本项目使用 uv 作为包管理工具。安装步骤如下：
+使用 pip 安装
 
 ```bash
-# 克隆仓库
-git clone https://github.com/Clarmy/zonaite.git
-cd zonaite
-
-# 使用 uv 安装依赖
-uv pip install .
+pip install zonaite
 ```
 
 ## 使用示例
