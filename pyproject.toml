@@ -17,6 +17,7 @@ dependencies = [
     "loguru>=0.7.0",
     "pandas>=2.0.0",
     "requests>=2.32.3",
+    "tqdm>=4.67.1",
 ]
 
 [project.optional-dependencies]
