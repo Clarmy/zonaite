@@ -122,3 +122,7 @@ print(collector.available_variables)
 print("Available stations:")
 print(collector.available_stations)
 ```
+
+## Star 历史
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Clarmy/zonaite&type=Date)](https://star-history.com/#Clarmy/zonaite&Date)
