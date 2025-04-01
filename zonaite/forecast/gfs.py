@@ -247,7 +247,7 @@ def download_bytes(
 
 
 def download_gfs_data(
-    dt: datetime,
+    init_dt: datetime,
     forecast_hour: int,
     elements: List[Dict],
     output_path: str,
@@ -264,7 +264,7 @@ def download_gfs_data(
     specific levels, making it efficient for cases where only certain elements are needed.
 
     Args:
-        dt (datetime): Datetime object for the forecast time
+        init_dt (datetime): Datetime object for the initialization time (model start time)
         forecast_hour (int): Forecast hour (0-384)
         elements (List[Dict]): List of elements to download, each containing:
             - name (str): Variable name (e.g., "TMP", "UGRD")
@@ -281,15 +281,15 @@ def download_gfs_data(
     total_bytes = 0
 
     # Ensure datetime has timezone information
-    if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
+    if init_dt.tzinfo is None:
+        init_dt = init_dt.replace(tzinfo=timezone.utc)
     else:
         # Convert to UTC for consistency
-        dt = dt.astimezone(timezone.utc)
+        init_dt = init_dt.astimezone(timezone.utc)
 
     # Extract date and cycle from datetime
-    date_str = dt.strftime("%Y%m%d")
-    cycle_str = dt.strftime("%H")
+    date_str = init_dt.strftime("%Y%m%d")
+    cycle_str = init_dt.strftime("%H")
 
     result = GFSDownloadResult(
         success=False,
@@ -403,7 +403,7 @@ if __name__ == "__main__":
     # Get previous day's UTC time
     utc_now = datetime.now(timezone.utc) - timedelta(days=1)
     # Set time to 00:00 UTC
-    forecast_time = datetime(
+    init_time = datetime(
         utc_now.year, utc_now.month, utc_now.day, 0, 0, tzinfo=timezone.utc
     )
 
@@ -411,13 +411,13 @@ if __name__ == "__main__":
     forecast_hour = 3
     quiet = False  # 设置是否静默输出
 
-    output_path = f"data/gfs_{forecast_time.strftime('%Y%m%d')}_{forecast_time.strftime('%H')}_{forecast_hour:03d}.grib2"
+    output_path = f"data/gfs_{init_time.strftime('%Y%m%d')}_{init_time.strftime('%H')}_{forecast_hour:03d}.grib2"
     if not quiet:
         logger.info(
-            f"Starting GFS data download: {forecast_time.strftime('%Y%m%d')}_{forecast_time.strftime('%H')}z"
+            f"Starting GFS data download: {init_time.strftime('%Y%m%d')}_{init_time.strftime('%H')}z"
         )
     result = download_gfs_data(
-        forecast_time, forecast_hour, elements, output_path, quiet=quiet
+        init_dt=init_time, forecast_hour=forecast_hour, elements=elements, output_path=output_path, quiet=quiet
     )
 
     if not quiet:

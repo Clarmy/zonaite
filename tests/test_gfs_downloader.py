@@ -34,7 +34,7 @@ def test_download_success(test_elements, test_output_dir):
     )
 
     result = download_gfs_data(
-        dt=start_dt,
+        init_dt=start_dt,
         forecast_hour=forecast_hour,
         elements=test_elements,
         output_path=output_path,
@@ -67,7 +67,7 @@ def test_download_invalid_elements(test_output_dir):
     output_path = os.path.join(test_output_dir, "gfs_invalid.grib2")
 
     result = download_gfs_data(
-        dt=start_dt,
+        init_dt=start_dt,
         forecast_hour=forecast_hour,
         elements=invalid_elements,
         output_path=output_path,
@@ -87,7 +87,7 @@ def test_download_future_data(test_elements, test_output_dir):
     output_path = os.path.join(test_output_dir, "gfs_future.grib2")
 
     result = download_gfs_data(
-        dt=future_dt,
+        init_dt=future_dt,
         forecast_hour=forecast_hour,
         elements=test_elements,
         output_path=output_path,
@@ -107,7 +107,7 @@ def test_download_invalid_forecast_hour(test_elements, test_output_dir):
     output_path = os.path.join(test_output_dir, "gfs_invalid_hour.grib2")
 
     result = download_gfs_data(
-        dt=start_dt,
+        init_dt=start_dt,
         forecast_hour=invalid_forecast_hour,
         elements=test_elements,
         output_path=output_path,
@@ -135,7 +135,7 @@ def test_download_multiple_elements(test_output_dir):
     output_path = os.path.join(test_output_dir, "gfs_multiple.grib2")
 
     result = download_gfs_data(
-        dt=start_dt,
+        init_dt=start_dt,
         forecast_hour=forecast_hour,
         elements=elements,
         output_path=output_path,
@@ -163,7 +163,7 @@ def test_download_performance(test_elements, test_output_dir):
     output_path = os.path.join(test_output_dir, "gfs_performance.grib2")
 
     result = download_gfs_data(
-        dt=start_dt,
+        init_dt=start_dt,
         forecast_hour=forecast_hour,
         elements=test_elements,
         output_path=output_path,
@@ -187,7 +187,7 @@ def test_download_custom_bucket_and_region(test_elements, test_output_dir):
     output_path = os.path.join(test_output_dir, "gfs_custom_bucket.grib2")
 
     result = download_gfs_data(
-        dt=start_dt,
+        init_dt=start_dt,
         forecast_hour=forecast_hour,
         elements=test_elements,
         output_path=output_path,
