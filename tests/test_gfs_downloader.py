@@ -1,6 +1,7 @@
-import pytest
 import os
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
+
+import pytest
 
 from zonaite.forecast import download_gfs_data
 

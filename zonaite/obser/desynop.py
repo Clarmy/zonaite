@@ -3,8 +3,8 @@ from io import StringIO
 
 import pandas as pd
 import requests
-from tqdm import tqdm
 from loguru import logger
+from tqdm import tqdm
 
 
 class DecodedSynopCollector:
