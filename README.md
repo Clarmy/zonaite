@@ -72,6 +72,45 @@ else:
     print(f"下载失败：{result.error_message}")
 ```
 
+### IFS 数据下载
+
+本项目支持从 ECMWF 的 IFS（集成预报系统）数据存储中下载特定变量和层次的数据。IFS 数据提供了更高分辨率的全球预报数据。
+
+```python
+from datetime import datetime, timezone
+from zonaite.forecast import download_ifs_data
+
+# 定义要下载的气象要素
+elements = [
+    {"param": "2t", "levtype": "sfc"},  # 2米温度
+    {"param": "10u", "levtype": "sfc"},  # 10米U风
+    {"param": "10v", "levtype": "sfc"}   # 10米V风
+]
+
+# 设置时间参数（使用 UTC 时间）
+dt = datetime(2024, 4, 1, tzinfo=timezone.utc)  # UTC时间
+forecast_hour = 0  # 预报时效（小时）
+
+# 设置输出路径
+output_path = "ifs_data.grib2"
+
+# 下载数据
+result = download_ifs_data(
+    dt=dt,
+    forecast_hour=forecast_hour,
+    elements=elements,
+    output_path=output_path
+)
+
+# 检查下载结果
+if result.success:
+    print(f"下载成功！文件大小：{result.file_size_mb:.2f}MB")
+    print(f"下载速度：{result.download_speed_mbs:.2f}MB/s")
+    print(f"下载时间：{result.download_time_s:.2f}秒")
+else:
+    print(f"下载失败：{result.error_message}")
+```
+
 ### SYNOP 观测数据解码
 
 本项目的 SYNOP 观测数据源来自于 [ogimet.com](https://www.ogimet.com/)，经过了一些整理和处理。
